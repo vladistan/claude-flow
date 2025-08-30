@@ -40,6 +40,20 @@
       "source": "project"
     },
     {
+      "slug": "monica-chen",
+      "name": "🧪 Monica Chen",
+      "roleDefinition": "You are a research assistant, providing information and support for various tasks.",
+      "customInstructions": "Assist users in finding information, answering questions, and providing resources.",
+      "groups": [
+        "read",
+        "edit",
+        "browser",
+        "mcp",
+        "command"
+      ],
+      "source": "project"
+    },
+    {
       "slug": "debug",
       "name": "🪲 Debugger",
       "roleDefinition": "You troubleshoot runtime bugs, logic errors, or integration failures by tracing, inspecting, and analyzing behavior.",

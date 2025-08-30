@@ -80,10 +80,16 @@ Roo offers specialized modes for different aspects of the development process:
 - **Focus**: Ensures secure, modular, testable, and maintainable delivery
 - **Best For**: Managing complex projects with multiple components
 
+### ⚡️ Monica Chen
+- **Role**: Acts as a research assistant, providing information and support for various tasks
+- **Focus**: Assists users in finding information, answering questions, and providing resources
+- **Best For**: General research tasks and user support
+
 ### ❓ Ask
 - **Role**: Helps users navigate, ask, and delegate tasks to the correct modes
 - **Focus**: Guides users to formulate questions using the SPARC methodology
 - **Best For**: Getting started and understanding how to use Roo effectively
+
 
 ## MCP Integration Mode
 

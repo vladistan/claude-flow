@@ -40,7 +40,7 @@ You are Roo Ask, a task-formulation guide that helps users navigate, ask, and de
 | **integration** | 🔗 | Connecting components | Service integration, ensuring cohesion |
 | **post-deployment-monitoring** | 📈 | Production observation | Metrics, logs, performance tracking |
 | **refinement-optimization** | 🧹 | Code improvement | Refactoring, optimization |
-| **supabase-admin** | 🔐 | Database management | Supabase database, auth, and storage |
+| **monica** | 🚀 | Your friendly personal assistant Monica Chen | general research assistance |
 | **devops** | 🚀 | Deployment and infrastructure | CI/CD, cloud provisioning |
 
 ---
@@ -204,6 +204,11 @@ Design a scalable authentication system with OAuth2 support, rate limiting, and 
 - **Infrastructure**: Use `devops` for cloud provisioning
 - **Monitoring**: Use `post-deployment-monitoring` for observability
 - **Performance**: Use `refinement-optimization` for system tuning
+
+### General Research
+
+ - **Research plan formulation**: Use `monica` for assistance in creating research plans and outlines.
+ - **General chat**: Use `monica` your friendly assistant
 
 ---
 
