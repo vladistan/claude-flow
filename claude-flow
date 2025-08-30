@@ -1,37 +1,113 @@
 #!/usr/bin/env node
 
 /**
- * Claude Flow CLI - Development Wrapper
- * Points to local bin/claude-flow.js for development
+ * Claude Flow CLI - Universal Wrapper
+ * Works in both CommonJS and ES Module projects
  */
 
-import { spawn } from 'child_process';
-import { resolve, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { existsSync } from 'fs';
+// Use dynamic import to work in both CommonJS and ES modules
+(async () => {
+  console.log('[claude-flow-wrapper] Starting wrapper...');
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+  const { spawn } = await import('child_process');
+  const { resolve } = await import('path');
+  const { fileURLToPath } = await import('url');
 
-// Point to local bin/claude-flow.js
-const localBin = resolve(__dirname, 'bin', 'claude-flow.js');
+  // Detect if we're running in ES module context
+  let __dirname;
+  try {
+    console.log('[claude-flow-wrapper] Detecting module system / __dirname...');
+    // Check if import.meta is available (ES modules)
+    if (typeof import.meta !== 'undefined' && import.meta.url) {
+      const __filename = fileURLToPath(import.meta.url);
+      __dirname = resolve(__filename, '..');
+      console.log('[claude-flow-wrapper] Detected ES module context. __dirname =', __dirname);
+    } 
+  } catch (err) {
+    // Fallback for CommonJS
+    __dirname = process.cwd();
+    console.log('[claude-flow-wrapper] Error detecting module type, falling back to process.cwd() as __dirname =', __dirname, 'Error:', err && err.message);
+  }
 
-if (existsSync(localBin)) {
-  const child = spawn('node', [localBin, ...process.argv.slice(2)], {
-    stdio: 'inherit',
-    shell: false
-  });
-  
-  child.on('error', (error) => {
-    console.error('❌ Error executing claude-flow:', error.message);
-    process.exit(1);
-  });
-  
-  child.on('exit', (code) => {
-    process.exit(code || 0);
-  });
-} else {
-  console.error('❌ Could not find bin/claude-flow.js');
-  console.error('Make sure you are in the claude-flow project directory');
+  // Try multiple strategies to find claude-flow
+  const strategies = [
+    // 1. Local node_modules
+    async () => {
+      console.log('[claude-flow-wrapper] Strategy 1: check local node_modules/.bin/claude-flow');
+      try {
+        const localPath = resolve(process.cwd(), 'node_modules/.bin/claude-flow');
+        const { existsSync } = await import('fs');
+        const exists = existsSync(localPath);
+        console.log('[claude-flow-wrapper] Local path:', localPath, 'exists:', exists);
+        if (exists) {
+          console.log('[claude-flow-wrapper] Spawning local claude-flow at', localPath);
+          return spawn(localPath, process.argv.slice(2), { stdio: 'inherit' });
+        }
+      } catch (e) {
+        console.log('[claude-flow-wrapper] Strategy 1 error:', e && e.message);
+      }
+    },
+
+    // 2. Parent node_modules (monorepo)
+    async () => {
+      console.log('[claude-flow-wrapper] Strategy 2: check parent node_modules/.bin/claude-flow (monorepo)');
+      try {
+        const parentPath = resolve(process.cwd(), '../node_modules/.bin/claude-flow');
+        const { existsSync } = await import('fs');
+        const exists = existsSync(parentPath);
+        console.log('[claude-flow-wrapper] Parent path:', parentPath, 'exists:', exists);
+        if (exists) {
+          console.log('[claude-flow-wrapper] Spawning parent claude-flow at', parentPath);
+          return spawn(parentPath, process.argv.slice(2), { stdio: 'inherit' });
+        }
+      } catch (e) {
+        console.log('[claude-flow-wrapper] Strategy 2 error:', e && e.message);
+      }
+    },
+
+    // 3. NPX with latest alpha version (prioritized over global)
+    async () => {
+      console.log('[claude-flow-wrapper] Strategy 3: fallback to npx claude-flow@alpha');
+      try {
+        console.log('[claude-flow-wrapper] Spawning: npx claude-flow@alpha', process.argv.slice(2));
+        return spawn('npx', ['claude-flow@alpha', ...process.argv.slice(2)], {
+          stdio: 'inherit',
+        });
+      } catch (e) {
+        console.log('[claude-flow-wrapper] Strategy 3 error:', e && e.message);
+      }
+    },
+  ];
+
+  // Try each strategy
+  for (const [index, strategy] of strategies.entries()) {
+    console.log('[claude-flow-wrapper] Attempting strategy', index + 1);
+    try {
+      const child = await strategy();
+      if (child) {
+        console.log('[claude-flow-wrapper] Child process spawned by strategy', index + 1);
+        child.on('exit', (code) => {
+          console.log('[claude-flow-wrapper] Child process exited with code', code);
+          process.exit(code || 0);
+        });
+        child.on('error', (err) => {
+          console.log('[claude-flow-wrapper] Child process error:', err && err.message);
+          if (err.code !== 'ENOENT') {
+            console.error('[claude-flow-wrapper] Error:', err);
+            process.exit(1);
+          } else {
+            console.log('[claude-flow-wrapper] ENOENT - command not found, trying next strategy if available');
+          }
+        });
+        return;
+      } else {
+        console.log('[claude-flow-wrapper] Strategy', index + 1, 'did not return a child process, continuing');
+      }
+    } catch (err) {
+      console.log('[claude-flow-wrapper] Unexpected error running strategy', index + 1, ':', err && err.message);
+    }
+  }
+
+  console.error('[claude-flow-wrapper] Could not find claude-flow. Please install it with: npm install claude-flow');
   process.exit(1);
-}
+})();

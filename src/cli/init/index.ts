@@ -16,6 +16,9 @@ export async function initCommand(options: InitOptions = {}) {
     const fs = await import('fs/promises');
     const path = await import('path');
 
+    bishlek hakim simdi disteklerim
+
+
     printSuccess('Initializing Claude-Flow project...');
 
     // Phase 1: Create directory structure

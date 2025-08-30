@@ -24,13 +24,13 @@ export const MAIN_HELP = `
   🔧 Non-interactive Fixes - Proper prompt injection for CI/CD & automation
 
 USAGE:
-  npx claude-flow@alpha <command> [options]    # Run latest alpha version
-  npx claude-flow@alpha <command> --help       # Get detailed help for any command
-  npx claude-flow@alpha --help                 # Show this help
-  
-  # After local install:
+  npx claude-flow@alpha <command> [options]    # En son alfa sürümünü çalıştırın
+  npx claude-flow@alpha <command> --help       # Herhangi bir komut için ayrıntılı yardım alın
+  npx claude-flow@alpha --help                 # Bu yardımı göster
+
+  # Yerel kurulumdan sonra:
   claude-flow <command> [options]
-  claude-flow <command> --help    # Get detailed help for any command
+  claude-flow <command> --help    # Herhangi bir komut için ayrıntılı yardım alın
 
 🚀 QUICK START:
   # First time setup (creates CLAUDE.md & .claude/commands)

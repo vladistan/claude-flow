@@ -117,8 +117,8 @@ export class SystemIntegration {
 
       // Try to initialize orchestrator if available
       try {
-        const { Orchestrator } = await import('../core/orchestrator-fixed.js');
-        this.orchestrator = new Orchestrator(this.configManager, this.eventBus, this.logger);
+        const { FixedOrchestrator } = await import('../core/orchestrator-fixed.js');
+        this.orchestrator = new FixedOrchestrator(this.configManager, this.eventBus, this.logger);
         if (typeof this.orchestrator.initialize === 'function') {
           await this.orchestrator.initialize();
         }

@@ -45,7 +45,7 @@ export interface HealthCheckResult {
   mcp: boolean;
 }
 
-export class Orchestrator {
+export class FixedOrchestrator {
   private agents: Map<string, AgentInfo> = new Map();
   private tasks: Map<string, TaskInfo> = new Map();
   private sessions: Map<string, SessionInfo> = new Map();

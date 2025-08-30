@@ -4,7 +4,7 @@ import { CLI, success, error, warning, info, VERSION } from '../cli-core.js';
 import type { Command, CommandContext } from '../cli-core.js';
 import colors from 'chalk';
 const { bold, blue, yellow } = colors;
-import { Orchestrator } from '../../core/orchestrator-fixed.js';
+import { FixedOrchestrator } from '../../core/orchestrator-fixed.js';
 import { ConfigManager } from '../../core/config.js';
 import type { MemoryManager } from '../../memory/manager.js';
 import { EventBus } from '../../core/event-bus.js';
@@ -22,7 +22,7 @@ import { statusCommand } from './status.js';
 import { monitorCommand } from './monitor.js';
 import { sessionCommand } from './session.js';
 
-let orchestrator: Orchestrator | null = null;
+let orchestrator: FixedOrchestrator | null = null;
 let configManager: ConfigManager | null = null;
 let persistence: JsonPersistenceManager | null = null;
 
@@ -34,12 +34,12 @@ async function getPersistence(): Promise<JsonPersistenceManager> {
   return persistence;
 }
 
-async function getOrchestrator(): Promise<Orchestrator> {
+async function getOrchestrator(): Promise<FixedOrchestrator> {
   if (!orchestrator) {
     const config = await getConfigManager();
     const eventBus = EventBus.getInstance();
     const logger = new Logger({ level: 'info', format: 'text', destination: 'console' });
-    orchestrator = new Orchestrator(config, eventBus, logger);
+    orchestrator = new FixedOrchestrator(config, eventBus, logger);
   }
   return orchestrator;
 }

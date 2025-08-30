@@ -95,7 +95,7 @@ export class SwarmCoordinator {
     await fs.mkdir(projectDir, { recursive: true });
 
     // Create basic Express server
-    const serverCode = `const express = require('express');
+    const serverCode = `import express from 'express';
 const app = express();
 const port = process.env.PORT || 3000;
 
